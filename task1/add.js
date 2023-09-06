@@ -1,9 +1,6 @@
 const addUserForm = document.querySelector("#addUserForm");
-console.log("addUserForm", addUserForm);
 let allUsers = [];
 const headerForm = ["id", "name", "email", "age", "status"];
-const bodyData = document.querySelector("#bodyData");
-console.log("bodyData", bodyData);
 
 // function get users from local storage
 const readFromLocalStorage = () => JSON.parse(localStorage.getItem("allUsers"));
@@ -34,26 +31,7 @@ const addUser = () => {
 console.log(allUsers);
 
 //event handlers for add users
-if (addUserForm) {
-  addUserForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    addUser();
-  });
-}
-
-const createElement = (parent, elem, text, classes) => {
-  let myElement = document.createElement(elem);
-  if (text) myElement.textContent = text;
-  if (classes) myElement.classList = classes;
-  parent.appendChild(myElement);
-  return myElement;
-};
-
-const displayAllUser = (users) => {
-  if (!users.length) {
-    const tr = createElement(bodyData, "tr", "no user yet", "text-center");
-    console.log(tr);
-  }
-};
-
-displayAllUser(allUsers);
+addUserForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  addUser();
+});
