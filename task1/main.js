@@ -1,12 +1,9 @@
 const addUserForm = document.querySelector("#addUserForm");
-console.log("addUserForm", addUserForm);
+const editUserForm = document.querySelector("#editUserForm");
 let allUsers = [];
 const headerForm = ["id", "name", "email", "age", "status"];
 const bodyData = document.querySelector("#bodyData");
 const singleUser = document.querySelector("#singleUser");
-
-console.log(bodyData);
-console.log("bodyData", bodyData);
 
 // function get users from local storage
 const readFromLocalStorage = (key) => JSON.parse(localStorage.getItem(key));
@@ -34,6 +31,7 @@ const addUser = () => {
   WriteToLocalStorage("allUsers", allUsers);
   addUserForm.reset();
   console.log(allUsers);
+  window.location = "index.html";
 };
 console.log(allUsers);
 
@@ -54,6 +52,8 @@ const createElement = (parent, elem, text, classes) => {
 };
 
 const displayAllUser = (users) => {
+  bodyData.textContent = "";
+
   if (!users.length) {
     const tr = createElement(bodyData, "tr", "no user yet", "text-center");
     console.log(tr);
@@ -99,8 +99,26 @@ const displayAllUser = (users) => {
         let targetUser = users[index];
         WriteToLocalStorage("targetUser", targetUser);
         console.log(singleUser);
-
         window.location = "show.html";
+      });
+
+      //edit status user
+      editStatusBtn.addEventListener("click", () => {
+        if (users[index].status === "active")
+          users[index] = { ...users[index], status: "inactive" };
+        else users[index] = { ...users[index], status: "active" };
+        // update status user in local storage
+        WriteToLocalStorage("allUsers", users);
+        //rerender status in ui
+        displayAllUser(users);
+      });
+
+      //show user
+      editBtn.addEventListener("click", () => {
+        let singleUser = users[index];
+        WriteToLocalStorage("singleUser", singleUser);
+        console.log(singleUser);
+        window.location = "edit.html";
       });
     });
   }
@@ -116,4 +134,43 @@ if (singleUser) {
   headerForm.forEach((head) =>
     createElement(singleUser, "p", ` ${head}: ${targetUser[head]} `, null)
   );
+}
+
+if (editUserForm) {
+  let singleUser = readFromLocalStorage("singleUser");
+  headerForm.forEach((head) => {
+    if (editUserForm.elements[head]) {
+      editUserForm.elements[head].value = singleUser[head];
+    }
+  });
+}
+
+//function add users
+const editUser = () => {
+  let oldUser = readFromLocalStorage("singleUser");
+  const newUser = {};
+  //get all values from the form
+  headerForm.forEach((input) => {
+    //store data in object
+    if (input == "id") newUser[input] = oldUser.id;
+    else newUser[input] = editUserForm.elements[input]?.value;
+
+    console.log(editUserForm.elements[input]?.value);
+  });
+
+  let index = allUsers.findIndex((user) => user.id == oldUser.id);
+  if (index !== -1) allUsers[index] = newUser;
+
+  WriteToLocalStorage("allUsers", allUsers);
+  editUserForm.reset();
+  console.log(allUsers);
+  window.location = "index.html";
+};
+
+//event handlers for edit users
+if (editUserForm) {
+  editUserForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    editUser();
+  });
 }
