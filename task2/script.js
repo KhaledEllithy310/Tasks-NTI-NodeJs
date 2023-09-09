@@ -37,11 +37,15 @@ const displayUserData = function (userData) {
 };
 
 const fetchData = async function () {
-  const url =
-    "https://jsonplaceholder.typicode.com/users?fbclid=IwAR3JPzDDfQbSdlioGjvbqhdYX6ajlAVzt181BaFQH-iACOMq3Hr9HTY8LW0";
-  const res = await (await fetch(url)).json();
-  console.log(res);
-  displayUserData(res);
+  try {
+    const url =
+      "https://jsonplaceholder.typicode.com/users?fbclid=IwAR3JPzDDfQbSdlioGjvbqhdYX6ajlAVzt181BaFQH-iACOMq3Hr9HTY8LW0";
+    const res = await (await fetch(url)).json();
+    console.log(res);
+    displayUserData(res);
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 fetchData();
