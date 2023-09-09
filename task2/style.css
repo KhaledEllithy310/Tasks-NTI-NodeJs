@@ -1,0 +1,12 @@
+body {
+  background-color: #ddd;
+}
+.myContainer {
+  width: 90%;
+  margin: 50px auto;
+}
+
+th,
+td {
+  vertical-align: middle !important;
+}
