@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "active"
+  },
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "active"
+  },
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "active"
+  },
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "active"
+  },
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "active"
+  },
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "inactive"
+  },
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "inactive"
+  },
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "inactive"
+  },
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "inactive"
+  },
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "inactive"
+  },
+  {
+    "id": 1,
+    "name": "product1",
+    "price": 30,
+    "description": "product1",
+    "discount": 0.3,
+    "status": "inactive"
+  }
+]

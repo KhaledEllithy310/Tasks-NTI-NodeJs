@@ -1,7 +1,6 @@
 require("dotenv").config();
 const app = require("./app/server");
-console.log(process.env);
 
-app.listen(process.env.PORT, () => {
-  console.log(`https//localhost:${process.env.PORT}`);
-});
+app.listen(process.env.PORT, () =>
+  console.log(`http://localhost:${process.env.PORT}`)
+);
