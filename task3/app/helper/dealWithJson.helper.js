@@ -5,7 +5,6 @@ class DealWithJson {
     let result;
     try {
       result = JSON.parse(fs.readFileSync(fileName));
-      console.log("result: ", result);
       if (!Array.isArray(result)) result = [];
     } catch (error) {
       console.log("there is an error in readFromJSON");

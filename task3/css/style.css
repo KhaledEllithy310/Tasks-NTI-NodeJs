@@ -1,0 +1,7 @@
+.discount {
+  text-decoration: line-through !important;
+  color: #ddd !important;
+}
+body {
+  background-color: #aaa !important;
+}

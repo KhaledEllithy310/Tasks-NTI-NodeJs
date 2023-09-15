@@ -1,0 +1,27 @@
+{{>navbar}}
+<section class="container">
+   <table class="table mt-5">
+      <thead>
+         <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>price</th>
+            {{#if hasDiscount}} <th>new Price</th> {{/if}}
+            <th>description</th>
+            <th>status</th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <th>{{product.id}}</th>
+            <th>{{product.name}}</th>
+            <th class={{classDiscount}}>${{product.price}}</th>
+            {{#if hasDiscount}} <th>${{product.newPrice}}</th> {{/if}}
+            <th>{{product.description}}</th>
+            <th>{{product.status}}</th>
+         </tr>
+      </tbody>
+   </table>
+</section>
+
+{{>footer}}

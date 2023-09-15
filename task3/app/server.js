@@ -7,6 +7,7 @@ const app = express();
 const staticDir = path.join(__dirname, "../public");
 const viewDir = path.join(__dirname, "../resources/views");
 const partialDir = path.join(__dirname, "../resources/layouts");
+app.use(express.urlencoded({ extended: true }));
 
 app.use(productRouter);
 app.use(express.static(staticDir));
@@ -17,3 +18,5 @@ hbs.registerPartials(partialDir);
 app.get("*", (req, res) => {
   res.render("err404");
 });
+
+module.exports = app;
