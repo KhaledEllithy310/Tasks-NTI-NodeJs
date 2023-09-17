@@ -1,27 +1,34 @@
-const DealWithJson = require("../helper/dealWithJson.helper");
-
+const productModel = require("../db/models/product.model");
 class Product {
   //show All products
-  static showAll = (req, res) => {
-    let allProducts = DealWithJson.readFromJSON();
+  static showAll = async (req, res) => {
+    let allProducts;
+
     if (req.query.termSearch) {
-      allProducts = Product.searchProducts(req, res, allProducts);
-    }
+      const searchKey = req.query.termSearch;
+      const searchQuery = { name: { $regex: searchKey, $options: "i" } };
+      allProducts = await productModel.find(searchQuery);
+    } else allProducts = await productModel.find();
+    // console.log(allProducts);
     res.render("allProducts", {
       pageTitle: "All Products",
       allProducts,
       hasProducts: allProducts.length,
-      classDiscount: "class = 'discount'",
     });
   };
 
   //show active product
-  static showActiveProducts = (req, res) => {
-    const allProducts = DealWithJson.readFromJSON();
-    let activeProducts = allProducts.filter((item) => item.status == "active");
+  static showActiveProducts = async (req, res) => {
+    let activeProducts;
+
     if (req.query.termSearch) {
-      activeProducts = Product.searchProducts(req, res, activeProducts);
-    }
+      const searchKey = req.query.termSearch;
+      const searchQuery = {
+        status: "active",
+        name: { $regex: searchKey, $options: "i" },
+      };
+      activeProducts = await productModel.find(searchQuery);
+    } else activeProducts = await productModel.find({ status: "active" });
     res.render("activeProducts", {
       pageTitle: "Active Products",
       allProducts: activeProducts,
@@ -30,15 +37,20 @@ class Product {
   };
 
   //show inactive product
-  static showInactiveProducts = (req, res) => {
-    const allProducts = DealWithJson.readFromJSON();
-    console.log(allProducts);
-    let inactiveProducts = allProducts.filter(
-      (item) => item.status == "inactive"
-    );
+  static showInactiveProducts = async (req, res) => {
+    let inactiveProducts;
+
     if (req.query.termSearch) {
-      inactiveProducts = Product.searchProducts(req, res, inactiveProducts);
+      const searchKey = req.query.termSearch;
+      const searchQuery = {
+        status: "inactive",
+        name: { $regex: searchKey, $options: "i" },
+      };
+      inactiveProducts = await productModel.find(searchQuery);
+    } else {
+      inactiveProducts = await productModel.find({ status: "inactive" });
     }
+
     res.render("inactiveProducts", {
       pageTitle: "Inactive Products",
       allProducts: inactiveProducts,
@@ -47,15 +59,14 @@ class Product {
   };
 
   //show single product
-  static showSingleProduct = (req, res) => {
+  static showSingleProduct = async (req, res) => {
     const { id } = req.params;
-    const allProducts = DealWithJson.readFromJSON();
-    const index = allProducts.findIndex((item) => item.id == id);
+    const productData = await productModel.findById(id);
     res.render("showSingle", {
       pageTitle: "show Product",
-      product: allProducts[index],
-      hasDiscount: allProducts[index].newPrice,
-      classDiscount: allProducts[index].newPrice ? "discount" : "",
+      product: productData,
+      hasDiscount: productData.newPrice,
+      classDiscount: productData.newPrice ? "discount" : "",
     });
   };
 
@@ -66,83 +77,53 @@ class Product {
     });
   };
 
-  static addProductLogic = (req, res) => {
-    const allProducts = DealWithJson.readFromJSON();
-    const product = { id: Date.now(), ...req.body };
+  static addProductLogic = async (req, res) => {
+    const product = req.body;
     if (product.discount != 0)
       product.newPrice = ((1 - product.discount / 100) * product.price).toFixed(
         2
       );
-    allProducts.push(product);
-    DealWithJson.writeToJSON(allProducts);
+    console.log(product);
+    const newProduct = new productModel(product);
+    await newProduct.save();
     res.redirect("/");
   };
 
   //edit product
-  static editProduct = (req, res) => {
+  static editProduct = async (req, res) => {
     const { id } = req.params;
-    const allProducts = DealWithJson.readFromJSON();
-    const index = allProducts.findIndex((item) => item.id == id);
-    if (index == -1) res.send("Product not found");
+    const productData = await productModel.findById(id);
     res.render("edit", {
       pageTitle: "edit Product",
-      product: allProducts[index],
-      isActive: allProducts[index].status == "active",
+      product: productData,
+      isActive: productData.status == "active",
     });
   };
 
-  static editProductLogic = (req, res) => {
+  static editProductLogic = async (req, res) => {
     const { id } = req.params;
-    const allProducts = DealWithJson.readFromJSON();
-    const index = allProducts.findIndex((item) => item.id == id);
-    if (index == -1) res.send("Product not found");
-    allProducts[index] = { ...allProducts[index], ...req.body };
-    DealWithJson.writeToJSON(allProducts);
+    await productModel.findByIdAndUpdate(id, req.body);
     res.redirect("/");
   };
 
   //edit status product
-  static editStatusProduct = (req, res) => {
+  static editStatusProduct = async (req, res) => {
     const { id } = req.params;
-    const allProducts = DealWithJson.readFromJSON();
-    const index = allProducts.findIndex((item) => item.id == id);
-    if (allProducts[index].status == "active") {
-      allProducts[index].status = "inactive";
-      DealWithJson.writeToJSON(allProducts);
-      Product.showActiveProducts(req, res);
+    const productData = await productModel.findById(id);
+    if (productData.status == "active") {
+      await productModel.findByIdAndUpdate(id, { status: "inactive" });
     } else {
-      allProducts[index].status = "active";
-      DealWithJson.writeToJSON(allProducts);
-      Product.showInactiveProducts(req, res);
+      await productModel.findByIdAndUpdate(id, { status: "active" });
     }
-    // res.redirect("/");
+    const previousPage = req.headers.referer || "/";
+    res.redirect(previousPage);
   };
 
   //delete product
-  static deleteProduct = (req, res) => {
+  static deleteProduct = async (req, res) => {
     const { id } = req.params;
-    const allProducts = DealWithJson.readFromJSON();
-    const index = allProducts.findIndex((item) => item.id == id);
-    allProducts.splice(index, 1);
-    DealWithJson.writeToJSON(allProducts);
+    await productModel.findByIdAndDelete(id);
     res.redirect("/");
-  };
-
-  //search for products
-  static searchProducts = (req, res, data) => {
-    const searchTerm = req.query.termSearch;
-    const allProducts = data;
-    console.log("searchTerm", typeof allProducts[0].id);
-    console.log(searchTerm);
-    if (allProducts && searchTerm) {
-      const filteredProducts = allProducts.filter((item) => {
-        return (
-          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.id.toString().includes(searchTerm)
-        );
-      });
-      return filteredProducts;
-    }
   };
 }
 
