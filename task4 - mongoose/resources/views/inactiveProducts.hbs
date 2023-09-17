@@ -1,0 +1,60 @@
+{{>navbar}}
+<section class="container my-5">
+   <div class="row">
+      <div class="col-lg-6">
+         <div>
+            <a href="/add" class="btn btn-primary">Add New Product</a>
+         </div>
+      </div>
+      <div class="col-lg-6">
+         <div>
+            <form>
+               <input class="form-control" name="termSearch">
+               <input type="submit" class="btn btn-outline-success mt-2" value="search">
+            </form>
+         </div>
+      </div>
+   </div>
+
+   <h3>Inactive Products</h3>
+
+   <table class="table table-stripped mt-4 text-center">
+      <thead>
+         <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>old price</th>
+            <th>new Price</th>
+            <th>description</th>
+            <th>status</th>
+            <th>Actions</th>
+         </tr>
+      </thead>
+      <tbody>
+         {{#if hasProducts}}
+         {{#each allProducts}}
+         <tr>
+            <td>{{id}}</td>
+            <td>{{name}}</td>
+            <td>{{price}}</td>
+            <td> {{#if newPrice }} {{newPrice}} {{else}} {{price}} {{/if}}</td>
+            <td>{{description}}</td>
+            <td>{{status}}</td>
+            <td>
+               <a href="/show/{{id}}" class="btn btn-success mx-2">Show</a>
+               <a href="/edit/{{id}}" class="btn btn-warning mx-2">Edit</a>
+               <a href="/editStatus/{{id}}" class="btn btn-warning mx-2">Edit status</a>
+               <a href="/delete/{{id}}" class="btn btn-danger mx-2">Delete</a>
+            </td>
+         </tr>
+         {{/each}}
+
+         {{else}}
+         <tr class="bg-danger">
+            <td colSpan="7" class="text-center">No Products Found</td>
+         </tr>
+         {{/if}}
+      </tbody>
+   </table>
+</section>
+{{>footer}}
