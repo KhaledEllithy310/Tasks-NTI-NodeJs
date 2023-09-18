@@ -3,26 +3,47 @@
    <div class="editProduct__home p-5">
       <div class="container my-4">
          <h1 class="py-3">edit Product</h1>
-         <form  id="editProductForm" method="post">
+         <form id="editProductForm" method="post">
             <div class="form-group">
                <input type="text" name="name" class="form-control" placeholder="Product Name"
                   value="{{product.name}}" />
             </div>
+            {{!-- Error Name --}}
+            {{#if errors.name}}
+            <div class="alert alert-danger" role="alert">{{errors.name.properties.message}}</div>
+            {{/if}}
+
             <div class="form-group">
                <input type="number" name="price" class="form-control" placeholder="price" value="{{product.price}}" />
             </div>
+            {{!-- Error price --}}
+            {{#if errors.price}}
+            <div class="alert alert-danger" role="alert">{{errors.price.properties.message}}</div>
+            {{/if}}
+
             <div class="form-group">
                <input type="number" name="discount" class="form-control" placeholder="discount"
                   value="{{product.discount}}" />
             </div>
+            {{!-- Error discount --}}
+            {{#if errors.discount}}
+            <div class="alert alert-danger" role="alert">{{errors.discount.properties.message}}</div>
+            {{/if}}
+
             <div class="form-group">
                <textarea name="description" id="" cols="10" rows="2" class="form-control"
                   placeholder="description">{{product.description}}</textarea>
             </div>
+            {{!-- Error description --}}
+            {{#if errors.description}}
+            <div class="alert alert-danger" role="alert">{{errors.description.properties.message}}</div>
+            {{/if}}
+
+
             <div class="form-group">
                <select name="status" id="" class="form-control">
-                  <option {{#if isActive}}  selected  {{/if}} value="active">active</option>
-                  <option {{#unless isActive}}  selected  {{/unless}}  value="inactive">inactive</option>
+                  <option {{#if isActive}} selected {{/if}} value="active">active</option>
+                  <option {{#unless isActive}} selected {{/unless}} value="inactive">inactive</option>
                </select>
             </div>
             <button class="btn btn-outline-success">edit Product</button>
